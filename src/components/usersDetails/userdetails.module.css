@@ -1,0 +1,21 @@
+.card {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 10px;
+}
+@media (max-width: 500px) {
+  .card {
+    font-size: 12px;
+  }
+}
+
+.card div {
+  display: flex;
+  white-space: nowrap;
+}
+.button {
+  text-align: center;
+}
+.avatar {
+  max-width: 100%;
+}

@@ -1,0 +1,18 @@
+.page {
+  cursor: pointer;
+  width: 40px;
+  margin: 5px;
+  border-radius: 5px;
+}
+.current {
+  background-color: #3182ce;
+  color: white;
+}
+.inactive {
+  background-color: rgba(9, 9, 205, 0.043);
+  color: #3182ce;
+}
+.pagination {
+  text-align: center;
+  margin: 40px;
+}
