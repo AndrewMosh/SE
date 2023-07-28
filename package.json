@@ -1,6 +1,7 @@
 {
   "name": "skytest",
   "version": "0.1.0",
+  "homepage": "https://AndrewMosh.github.io/test_SE",
   "private": true,
   "dependencies": {
     "@chakra-ui/icons": "^2.1.0",
