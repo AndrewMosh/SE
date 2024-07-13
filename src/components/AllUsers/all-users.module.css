@@ -1,18 +1,17 @@
 .all {
-  margin: 0 auto;
-  max-width: 900px;
+    margin: 0 auto;
 }
 
 @media (max-width: 555px) {
-  .mobile {
-    display: none;
-  }
+    .mobile {
+        display: none;
+    }
 }
 .table {
-  cursor: pointer;
+    cursor: pointer;
 }
 @media (max-width: 450px) {
-  .table {
-    display: none;
-  }
+    .table {
+        display: none;
+    }
 }

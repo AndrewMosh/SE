@@ -1,31 +1,30 @@
-# Документация
+# React + TypeScript + Vite
 
-Данный проект является реализацией интерфейса для поиска и сортировки пользователей по количеству их репозиториев на платформе GitHub. Проект разработан с использованием React, Redux toolkit, Chakra UI и включает в себя функции поиска, сортировки, пагинации и отображения подробностей о выбранном пользователе.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-### Установка и запуск проекта
+Currently, two official plugins are available:
 
-Задеплоенный проект находится по адресу `https://andrewmosh.github.io/test_SE/`
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-<br/>
-Либо
-<br/>
-1. Скачайте проект с репозитория GitHub.
-2. Откройте командную строку в папке проекта.
-3. Установите зависимости, запустив команду `npm install`.
-4. Запустите проект, выполнив команду `npm start`.
+## Expanding the ESLint configuration
 
-### Использование
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-После запуска проекта откройте браузер и перейдите по адресу `http://localhost:3000`. Вы увидите интерфейс для поиска пользователей на GitHub.
+- Configure the top-level `parserOptions` property like this:
 
-#### Поиск
+```js
+export default {
+  // other rules...
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    project: ['./tsconfig.json', './tsconfig.node.json'],
+    tsconfigRootDir: __dirname,
+  },
+}
+```
 
-Введите логин пользователя в поле поиска и нажмите клавишу Enter или кнопку "Search". Список пользователей, удовлетворяющих поисковому запросу, будет отображен на странице.
-
-#### Сортировка
-
-После отображения списка пользователей, вы можете отсортировать его по количеству репозиториев. Для этого нажмите на кнопку "Кол-во репозиториев". Список пользователей будет автоматически пересортирован.
-
-#### Отображение подробностей
-
-При клике на пользователя в списке, на экране будет отображена дополнительная информация о нем. Эта информация может включает в себя логин, фотографию профиля и другие данные.
+- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
+- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
