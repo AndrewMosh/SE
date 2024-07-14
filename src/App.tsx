@@ -7,8 +7,8 @@ import { Input, Button } from "@chakra-ui/react";
 import "./App.css";
 
 const App = () => {
-    const [searchQuery, setSearchQuery] = useState<string>("");
-    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
     const dispatch = useDispatch<AppDispatch>();
 
     const handleSearch = () => {

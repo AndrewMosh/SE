@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import Pagination from "../Pagination/Pagination";
 import UsersDetails from "../usersDetails/UsersDetails";
 import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableContainer, useDisclosure } from "@chakra-ui/react";
-import { setSelectedUser, fetchSortedUsersDesc, fetchSortedUsersAsc } from "../../store/userSlice";
+import { setSelectedUser, fetchUsers, fetchSortedUsers } from "../../store/userSlice";
 import { useDispatch } from "react-redux";
 import s from "./all-users.module.css";
 import Loader from "../Loader/Loader";
@@ -30,10 +30,10 @@ const AllUsers: React.FC<PageProps> = ({ searchQuery, currentPage, setCurrentPag
     const handleSort = () => {
         setSorted(sorted === "asc" ? "desc" : "asc");
         if (sorted === "asc") {
-            dispatch(fetchSortedUsersDesc(searchQuery));
+            dispatch(fetchSortedUsers({ query: searchQuery, sortOrder: "asc" }));
             setCurrentPage(1);
         } else {
-            dispatch(fetchSortedUsersAsc(searchQuery));
+            dispatch(fetchSortedUsers({ query: searchQuery, sortOrder: "desc" }));
             setCurrentPage(1);
         }
     };

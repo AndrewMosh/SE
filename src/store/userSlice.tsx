@@ -10,25 +10,27 @@ export interface UserState {
     error: string | null;
 }
 
-export const fetchUsers = createAsyncThunk<User[], string, { rejectValue: string }>(
-    "user/fetchUsers",
-    async (query, { rejectWithValue }) => {
-        try {
-            const response = await axios.get(`${BASIC_URL}?q=${query}`);
-            return response.data.items;
-        } catch (error) {
-            console.error("Error:", error);
-            return rejectWithValue("Failed to fetch users");
-        }
-    }
-);
+type SortOrder = "asc" | "desc";
 
-export const fetchSortedUsersDesc = createAsyncThunk<User[], string, { rejectValue: string }>(
-    "user/fetchSortedUsersDesc",
-    async (query, { rejectWithValue }) => {
+const fetchUsers = createAsyncThunk<User[], string, { rejectValue: string }>("user/fetchUsers", async (query, { rejectWithValue }) => {
+    try {
+        const response = await axios.get<{ items: User[] }>(`${BASIC_URL}?q=${query}`);
+        return response.data.items;
+    } catch (error) {
+        console.error("Error:", error);
+        return rejectWithValue("Failed to fetch users");
+    }
+});
+
+const fetchSortedUsers = createAsyncThunk<User[], { query: string; sortOrder: SortOrder }, { rejectValue: string }>(
+    "user/fetchSortedUsers",
+    async ({ query, sortOrder }, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`${BASIC_URL}?q=${query}`);
-            return response.data.items.sort((a: User, b: User) => b.repos_url.length - a.repos_url.length);
+            const response = await axios.get<{ items: User[] }>(`${BASIC_URL}?q=${query}`);
+            return response.data.items.sort((a, b) => {
+                const diff = a.repos_url.length - b.repos_url.length;
+                return sortOrder === "asc" ? diff : -diff;
+            });
         } catch (error) {
             console.error("Error:", error);
             return rejectWithValue("Failed to fetch sorted users");
@@ -36,27 +38,16 @@ export const fetchSortedUsersDesc = createAsyncThunk<User[], string, { rejectVal
     }
 );
 
-export const fetchSortedUsersAsc = createAsyncThunk<User[], string, { rejectValue: string }>(
-    "user/fetchSortedUsersAsc",
-    async (query, { rejectWithValue }) => {
-        try {
-            const response = await axios.get(`${BASIC_URL}?q=${query}`);
-            return response.data.items.sort((a: User, b: User) => a.repos_url.length - b.repos_url.length);
-        } catch (error) {
-            console.error("Error:", error);
-            return rejectWithValue("Failed to fetch sorted users");
-        }
-    }
-);
+const initialState: UserState = {
+    users: [],
+    selectedUser: null,
+    status: "idle",
+    error: null,
+};
 
 const userSlice = createSlice({
     name: "user",
-    initialState: {
-        users: [],
-        selectedUser: null,
-        status: "idle",
-        error: null,
-    } as UserState,
+    initialState,
     reducers: {
         setSelectedUser: (state, action: PayloadAction<User | null>) => {
             state.selectedUser = action.payload;
@@ -70,30 +61,21 @@ const userSlice = createSlice({
             .addCase(fetchUsers.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.users = action.payload;
+                state.error = null;
             })
             .addCase(fetchUsers.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.payload || "Failed to fetch users";
             })
-            .addCase(fetchSortedUsersDesc.pending, (state) => {
+            .addCase(fetchSortedUsers.pending, (state) => {
                 state.status = "loading";
             })
-            .addCase(fetchSortedUsersDesc.fulfilled, (state, action) => {
+            .addCase(fetchSortedUsers.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.users = action.payload;
+                state.error = null;
             })
-            .addCase(fetchSortedUsersDesc.rejected, (state, action) => {
-                state.status = "failed";
-                state.error = action.payload || "Failed to fetch sorted users";
-            })
-            .addCase(fetchSortedUsersAsc.pending, (state) => {
-                state.status = "loading";
-            })
-            .addCase(fetchSortedUsersAsc.fulfilled, (state, action) => {
-                state.status = "succeeded";
-                state.users = action.payload;
-            })
-            .addCase(fetchSortedUsersAsc.rejected, (state, action) => {
+            .addCase(fetchSortedUsers.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.payload || "Failed to fetch sorted users";
             });
@@ -101,7 +83,6 @@ const userSlice = createSlice({
 });
 
 export const { setSelectedUser } = userSlice.actions;
-
 export const { reducer } = userSlice;
-
+export { fetchUsers, fetchSortedUsers };
 export default reducer;
